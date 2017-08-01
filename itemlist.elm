@@ -54,6 +54,7 @@ type Msg
     | Had Bool
     | Reset
     | ErrorMessage String
+    | Delete Int
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -83,6 +84,9 @@ update msg model =
         ErrorMessage error ->
             ( { model | errorMessage = error }, Cmd.none )
 
+        Delete index ->
+            ( { model | beers = removeItem index model.beers }, Cmd.none )
+
 
 setName : String -> Beer -> Beer
 setName name beer =
@@ -109,6 +113,11 @@ setHad had beer =
     { beer | had = had }
 
 
+removeItem : Int -> List Beer -> List Beer
+removeItem index beerList =
+    List.take index beerList ++ List.drop (index + 1) beerList
+
+
 
 -- SUBSCRIPTIONS
 
@@ -125,8 +134,8 @@ subscriptions model =
 view : Model -> Html Msg
 view model =
     div []
-        ((List.map
-            (\b -> renderBeer b)
+        ((List.indexedMap
+            (\i b -> renderBeer b i)
             (model.beers)
          )
             ++ [ div [] [ text model.errorMessage ] ]
@@ -145,8 +154,8 @@ view model =
         )
 
 
-renderBeer : Beer -> Html Msg
-renderBeer beer =
+renderBeer : Beer -> Int -> Html Msg
+renderBeer beer index =
     div []
         [ h3 [] [ text beer.name ]
         , h4 [] [ text beer.brand ]
@@ -167,6 +176,7 @@ renderBeer beer =
                 False ->
                     text "not had"
             ]
+        , button [ onClick (Delete index) ] [ text "Delete" ]
         ]
 
 
