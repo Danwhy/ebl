@@ -5,6 +5,8 @@ import Fuzz exposing (Fuzzer, list, int, string)
 import Test exposing (..)
 import Main exposing (..)
 import Types exposing (..)
+import State exposing (..)
+import View exposing (..)
 
 
 emptyModel : Model
