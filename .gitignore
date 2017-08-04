@@ -28,8 +28,5 @@ elm-stuff
 # elm-repl generated files
 repl-temp-*
 
-# test data
-web/elm/data.json
-
 # compiled elm
 web/static/js/main.js
