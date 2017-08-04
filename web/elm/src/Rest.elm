@@ -7,7 +7,7 @@ import Json.Decode as Decode
 
 getInitialData : Cmd Msg
 getInitialData =
-    Http.get "../data.json" decodeInitialData
+    Http.get "./data" decodeInitialData
         |> Http.send QueryComplete
 
 
