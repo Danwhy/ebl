@@ -1,5 +1,6 @@
 module Main exposing (..)
 
+import Types exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput, onClick, onCheck)
@@ -20,23 +21,6 @@ main =
 -- MODEL
 
 
-type alias Beer =
-    { name : String
-    , brand : String
-    , beerType : String
-    , rating : Int
-    , had : Bool
-    }
-
-
-type alias Model =
-    { beers : List Beer
-    , beerToAdd : Beer
-    , errorMessage : String
-    , response : List Beer
-    }
-
-
 init : ( Model, Cmd Msg )
 init =
     update GetData (Model [] { name = "", brand = "", beerType = "", rating = 0, had = False } "" [])
@@ -44,20 +28,6 @@ init =
 
 
 -- UPDATE
-
-
-type Msg
-    = Add Beer
-    | Name String
-    | Brand String
-    | Type String
-    | Rating Int
-    | Had Bool
-    | Reset
-    | ErrorMessage String
-    | Delete Int
-    | QueryComplete (Result Http.Error (List Beer))
-    | GetData
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )

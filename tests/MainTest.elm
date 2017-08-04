@@ -1,14 +1,15 @@
-module Listtest exposing (..)
+module MainTest exposing (..)
 
 import Expect exposing (Expectation)
 import Fuzz exposing (Fuzzer, list, int, string)
 import Test exposing (..)
-import Itemlist exposing (..)
+import Main exposing (..)
+import Types exposing (..)
 
 
 emptyModel : Model
 emptyModel =
-    Model [] { name = "", brand = "", beerType = "", rating = 0, had = False } ""
+    Model [] { name = "", brand = "", beerType = "", rating = 0, had = False } "" []
 
 
 oneItemModel : Model
@@ -17,6 +18,7 @@ oneItemModel =
         [ (Beer "Test" "TestBrand" "TestType" 0 False) ]
         { name = "", brand = "", beerType = "", rating = 0, had = False }
         ""
+        []
 
 
 suite : Test
