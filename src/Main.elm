@@ -1,4 +1,4 @@
-module Itemlist exposing (..)
+module Main exposing (..)
 
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -225,7 +225,7 @@ validate beer =
 
 getInitialData : Cmd Msg
 getInitialData =
-    Http.get "./data.json" decodeInitialData
+    Http.get "../data.json" decodeInitialData
         |> Http.send QueryComplete
 
 
