@@ -1,4 +1,4 @@
-module Rest exposing (getInitialData, sendData)
+module Rest exposing (getInitialData, sendData, removeData)
 
 import Types exposing (..)
 import Http
@@ -19,12 +19,13 @@ decodeInitialData =
 
 beerDecoder : Decode.Decoder Beer
 beerDecoder =
-    Decode.map5 Beer
+    Decode.map6 Beer
         (Decode.field "name" Decode.string)
         (Decode.field "brand" Decode.string)
         (Decode.field "beerType" Decode.string)
         (Decode.field "rating" Decode.int)
         (Decode.field "had" Decode.bool)
+        (Decode.maybe (Decode.field "id" Decode.int))
 
 
 beerToSend : Beer -> Encode.Value
@@ -38,7 +39,23 @@ beerToSend newBeer =
         ]
 
 
+beerToDelete : Int -> Encode.Value
+beerToDelete beer_id =
+    Encode.object [ ( "id", Encode.int beer_id ) ]
+
+
 sendData : Beer -> Cmd Msg
 sendData newBeer =
     Http.post "/data/send" (Http.jsonBody (beerToSend newBeer)) (Decode.succeed "1")
         |> Http.send AddComplete
+
+
+removeData : Beer -> Cmd Msg
+removeData beer =
+    case beer.id of
+        Just id ->
+            Http.post "/data/delete" (Http.jsonBody (beerToDelete id)) (Decode.succeed "1")
+                |> Http.send AddComplete
+
+        Nothing ->
+            Cmd.none

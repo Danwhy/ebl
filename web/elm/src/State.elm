@@ -6,7 +6,7 @@ import Rest exposing (..)
 
 init : ( Model, Cmd Msg )
 init =
-    update GetData (Model [] { name = "", brand = "", beerType = "", rating = 0, had = False } "" [])
+    update GetData (Model [] { name = "", brand = "", beerType = "", rating = 0, had = False, id = Nothing } "" [])
 
 
 
@@ -43,13 +43,18 @@ update msg model =
             ( { model | beerToAdd = setHad had model.beerToAdd }, Cmd.none )
 
         Reset ->
-            ( { model | beerToAdd = { name = "", brand = "", beerType = "", rating = 0, had = False }, errorMessage = "" }, Cmd.none )
+            ( { model | beerToAdd = { name = "", brand = "", beerType = "", rating = 0, had = False, id = Nothing }, errorMessage = "" }, Cmd.none )
 
         ErrorMessage error ->
             ( { model | errorMessage = error }, Cmd.none )
 
-        Delete index ->
-            ( { model | beers = removeItem index model.beers }, Cmd.none )
+        Delete beer ->
+            case beer.id of
+                Just id ->
+                    ( model, removeData beer )
+
+                Nothing ->
+                    ( model, Cmd.none )
 
         QueryComplete response ->
             case response of

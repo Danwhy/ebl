@@ -10,7 +10,8 @@ defmodule Ebl.DataController do
         brand: x.brand,
         beerType: x.type,
         rating: x.rating,
-        had: x.had
+        had: x.had,
+        id: x.id
       } end)
 
     json conn, %{beers: beers}
@@ -19,6 +20,12 @@ defmodule Ebl.DataController do
   def add(conn, params) do
     changeset = Ebl.Beer.changeset %Ebl.Beer{}, params
     Repo.insert! changeset
+    json conn, %{}
+  end
+
+  def delete(conn, %{"id" => id}) do
+    to_delete = Repo.get!(Ebl.Beer, id)
+    Repo.delete! to_delete
     json conn, %{}
   end
 end

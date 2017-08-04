@@ -24,6 +24,7 @@ defmodule Ebl.Router do
 
     get "/get", DataController, :index
     post "/send", DataController, :add
+    post "/delete", DataController, :delete
   end
 
   # Other scopes may use custom stacks.

@@ -10,8 +10,8 @@ import Html.Events exposing (onInput, onClick, onCheck)
 view : Model -> Html Msg
 view model =
     div []
-        ((List.indexedMap
-            (\i b -> renderBeer b i)
+        ((List.map
+            (\b -> renderBeer b)
             (model.beers)
          )
             ++ [ div [] [ text model.errorMessage ]
@@ -39,8 +39,8 @@ view model =
         )
 
 
-renderBeer : Beer -> Int -> Html Msg
-renderBeer beer index =
+renderBeer : Beer -> Html Msg
+renderBeer beer =
     div []
         [ h3 [] [ text beer.name ]
         , h4 [] [ text beer.brand ]
@@ -61,7 +61,7 @@ renderBeer beer index =
                 False ->
                     text "not had"
             ]
-        , button [ onClick (Delete index) ] [ text "Delete" ]
+        , button [ onClick (Delete beer) ] [ text "Delete" ]
         ]
 
 

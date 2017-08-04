@@ -9,6 +9,7 @@ type alias Beer =
     , beerType : String
     , rating : Int
     , had : Bool
+    , id : Maybe Int
     }
 
 
@@ -29,7 +30,7 @@ type Msg
     | Had Bool
     | Reset
     | ErrorMessage String
-    | Delete Int
+    | Delete Beer
     | QueryComplete (Result Http.Error (List Beer))
     | GetData
     | AddComplete (Result Http.Error String)
