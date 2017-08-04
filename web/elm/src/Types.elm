@@ -32,3 +32,4 @@ type Msg
     | Delete Int
     | QueryComplete (Result Http.Error (List Beer))
     | GetData
+    | AddComplete (Result Http.Error String)

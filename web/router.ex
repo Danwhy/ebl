@@ -22,7 +22,8 @@ defmodule Ebl.Router do
   scope "/data", Ebl do
     pipe_through :api
 
-    get "/", DataController, :index
+    get "/get", DataController, :index
+    post "/send", DataController, :add
   end
 
   # Other scopes may use custom stacks.

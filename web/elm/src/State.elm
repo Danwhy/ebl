@@ -17,7 +17,15 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Add newBeer ->
-            update Reset { model | beers = newBeer :: model.beers }
+            ( model, sendData newBeer )
+
+        AddComplete response ->
+            case response of
+                Ok _ ->
+                    update GetData model
+
+                Err error ->
+                    update (ErrorMessage (toString error)) model
 
         Name name ->
             ( { model | beerToAdd = setName name model.beerToAdd }, Cmd.none )
@@ -46,7 +54,7 @@ update msg model =
         QueryComplete response ->
             case response of
                 Ok result ->
-                    ( { model | beers = result }, Cmd.none )
+                    update Reset { model | beers = result }
 
                 Err error ->
                     update (ErrorMessage (toString error)) model

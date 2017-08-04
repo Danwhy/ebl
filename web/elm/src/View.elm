@@ -31,7 +31,7 @@ view model =
                                 Add model.beerToAdd
 
                             False ->
-                                ErrorMessage "Please fill in at least one detail"
+                                ErrorMessage "Please fill in all details"
                         )
                     ]
                     [ text "Add" ]
@@ -79,7 +79,7 @@ validate beer =
         { name, brand, beerType } =
             beer
     in
-        if String.length name == 0 && String.length brand == 0 && String.length beerType == 0 then
+        if String.length name == 0 || String.length brand == 0 || String.length beerType == 0 then
             False
         else
             True

@@ -34,24 +34,13 @@ suite =
                             Beer "" "" "" 0 False
                     in
                         Expect.equal (validate testBeer) False
-            , test "record with one value is valid" <|
+            , test "record with one value is not valid" <|
                 \_ ->
                     let
                         testBeer =
                             Beer "Testing" "" "" 0 False
                     in
-                        Expect.equal (validate testBeer) True
-            ]
-        , describe "Add item to list"
-            [ test "add item" <|
-                \_ ->
-                    let
-                        testBeer =
-                            Beer "Test" "TestBrand" "TestType" 0 False
-                    in
-                        Expect.equal
-                            (update (Add testBeer) emptyModel)
-                            ( oneItemModel, Cmd.none )
+                        Expect.equal (validate testBeer) False
             ]
         , describe "Remove item from list"
             [ test "remove item" <|
