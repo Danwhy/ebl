@@ -3,6 +3,8 @@ module Itemlist exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onInput, onClick, onCheck)
+import Http
+import Json.Decode as Decode
 
 
 main =
@@ -31,14 +33,13 @@ type alias Model =
     { beers : List Beer
     , beerToAdd : Beer
     , errorMessage : String
+    , response : List Beer
     }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model [] { name = "", brand = "", beerType = "", rating = 0, had = False } ""
-    , Cmd.none
-    )
+    update GetData (Model [] { name = "", brand = "", beerType = "", rating = 0, had = False } "" [])
 
 
 
@@ -55,6 +56,8 @@ type Msg
     | Reset
     | ErrorMessage String
     | Delete Int
+    | QueryComplete (Result Http.Error (List Beer))
+    | GetData
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -86,6 +89,17 @@ update msg model =
 
         Delete index ->
             ( { model | beers = removeItem index model.beers }, Cmd.none )
+
+        QueryComplete response ->
+            case response of
+                Ok result ->
+                    ( { model | beers = result }, Cmd.none )
+
+                Err error ->
+                    update (ErrorMessage (toString error)) model
+
+        GetData ->
+            ( model, getInitialData )
 
 
 setName : String -> Beer -> Beer
@@ -207,3 +221,24 @@ validate beer =
             False
         else
             True
+
+
+getInitialData : Cmd Msg
+getInitialData =
+    Http.get "./data.json" decodeInitialData
+        |> Http.send QueryComplete
+
+
+decodeInitialData : Decode.Decoder (List Beer)
+decodeInitialData =
+    Decode.field "beers" (Decode.list beerDecoder)
+
+
+beerDecoder : Decode.Decoder Beer
+beerDecoder =
+    Decode.map5 Beer
+        (Decode.field "name" Decode.string)
+        (Decode.field "brand" Decode.string)
+        (Decode.field "beerType" Decode.string)
+        (Decode.field "rating" Decode.int)
+        (Decode.field "had" Decode.bool)
