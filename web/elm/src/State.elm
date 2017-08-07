@@ -21,8 +21,8 @@ update msg model =
 
         AddComplete response ->
             case response of
-                Ok _ ->
-                    update GetData model
+                Ok result ->
+                    update Reset { model | beers = result }
 
                 Err error ->
                     update (ErrorMessage (toString error)) model

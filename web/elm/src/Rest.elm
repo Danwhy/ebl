@@ -46,7 +46,7 @@ beerToDelete beer_id =
 
 sendData : Beer -> Cmd Msg
 sendData newBeer =
-    Http.post "/data/send" (Http.jsonBody (beerToSend newBeer)) (Decode.succeed "1")
+    Http.post "/data/send" (Http.jsonBody (beerToSend newBeer)) decodeInitialData
         |> Http.send AddComplete
 
 
@@ -54,7 +54,7 @@ removeData : Beer -> Cmd Msg
 removeData beer =
     case beer.id of
         Just id ->
-            Http.post "/data/delete" (Http.jsonBody (beerToDelete id)) (Decode.succeed "1")
+            Http.post "/data/delete" (Http.jsonBody (beerToDelete id)) decodeInitialData
                 |> Http.send AddComplete
 
         Nothing ->
